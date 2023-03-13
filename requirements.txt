@@ -1,6 +1,6 @@
 pandas
 pandas-datareader
-pølotly
+plotly
 dash
 dash-bootstrap-components
 dash-bootstrap-templates
