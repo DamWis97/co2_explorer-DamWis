@@ -23,6 +23,37 @@ df.columns = ['COUNTRY', 'YEAR', 'TOTAL_CO2', 'CO2_PER_CAPITA']
 # Drop NA
 df.dropna(inplace = True)
 
+
+# Copy df
+df_copy = df.copy()
+
+# Sort data according to year
+df_copy.sort_values(['YEAR'], inplace = True)
+
+# Create line plot
+fig = px.line(
+    df_copy,
+    x = 'YEAR',
+    y = 'TOTAL_CO2'
+)
+
+fig.update_layout(
+    yaxis=dict(title='Total CO2'),
+    yaxis2=dict(title='CO2 Per Capita', overlaying='y', side='right',
+                tickfont=dict(color='red')),
+    xaxis_title = 'CO2 Around the world',
+    showlegend = False
+)
+
+fig.add_scatter(x=df['YEAR'],
+                y=df['CO2_PER_CAPITA'],
+                mode='lines',
+                yaxis = 'y2',
+                hovertext=df['CO2_PER_CAPITA'])
+
+fig.update_traces(textposition='top center')
+
+
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP, dbc_css])
 server = app.server
 
@@ -36,47 +67,11 @@ app.layout = dbc.Container(
                [World Development Indicators](https://datatopics.worldbank.org/world-development-indicators/) 
                database."""
         ),
+        dcc.Graph(figure = fig)
         
     ],
     className = 'dbc'
 
 
 )
-
-def plot_co2(df=df):
-
-    # Copy df
-    df_copy = df.copy()
-
-    # Sort data according to year
-    df_copy.sort_values(['YEAR'], inplace = True)
-
-    # Create line plot
-    fig = px.line(
-        df_copy,
-        x = 'YEAR',
-        y = 'TOTAL_CO2'
-    )
-
-    fig.update_layout(
-        yaxis=dict(title='Total CO2'),
-        yaxis2=dict(title='CO2 Per Capita', overlaying='y', side='right',
-                    tickfont=dict(color='red')),
-        xaxis_title = 'CO2 Around the world',
-        showlegend = False
-    )
-
-    fig.add_scatter(x=df['YEAR'],
-                    y=df['CO2_PER_CAPITA'],
-                    mode='lines',
-                    yaxis = 'y2',
-                    hovertext=df['CO2_PER_CAPITA'])
-
-    fig.update_traces(textposition='top center')
-
-    return fig
-
-plot_co2(df)
-
-if __name__ == '__main__':
-    app.run_server(debug = True)
+app.run_server()
