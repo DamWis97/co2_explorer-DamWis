@@ -135,4 +135,4 @@ def wb_line(country_lst, df=df_wb):
 
     return fig
 
-app.run_server()
+app.run_server(debug = True)
