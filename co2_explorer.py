@@ -41,15 +41,27 @@ options = []
 for country in df_wb['country'].unique():
     options.append({'label' : country, 'value' : country})
 
+# List to store countries that have an entry for the specified column
+countries_with_entry = []
+
+# Iterate over the countries and check if they have an entry for the specified column
+for country in df_wb['country'].unique():
+    for index, row in df_wb.iterrows():
+        if row['country'] == country and not pd.isna(row['CPI']):
+            countries_with_entry.append(country)
+            break
+
+countries_with_entry
 # Save countries for dropdown menu later
 countries = dcc.Dropdown(
     id = 'my_input',
-    options = options,
+    options = countries_with_entry,
     value = 'Norway',
     multi = True
 )
 
 data_source = """
+Note that countries without inflation data provided by World Data Bank, have been removed from the options.
 Data is collected from [World Data Bank](https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG).
 """
 
@@ -63,6 +75,7 @@ app.layout = dbc.Container(
         # Header
         html.H1('Inflation around the world'),
         html.P('Comparison between chosen countries'),
+        dcc.Markdown(data_source),
 
         # Input component - dropdown menu
         html.Label('Select countries:'),
