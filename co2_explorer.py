@@ -50,12 +50,13 @@ for country in df_wb['country'].unique():
         if row['country'] == country and not pd.isna(row['CPI']):
             countries_with_entry.append(country)
             break
+# Filter out from the dictionary
+options = [opt for opt in options if opt['value'] in countries_with_entry]
 
-countries_with_entry
 # Save countries for dropdown menu later
 countries = dcc.Dropdown(
     id = 'my_input',
-    options = countries_with_entry,
+    options = options,
     value = 'Norway',
     multi = True
 )
