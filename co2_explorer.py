@@ -49,6 +49,10 @@ countries = dcc.Dropdown(
     multi = True
 )
 
+data_source = """
+Data is collected from [World Data Bank](https://data.worldbank.org/indicator/FP.CPI.TOTL.ZG).
+"""
+
 # Application
 app = Dash(__name__, external_stylesheets = [dbc.themes.BOOTSTRAP, dbc_css])
 server = app.server
@@ -116,7 +120,5 @@ def wb_line(country_lst, df=df_wb):
 
 
     return fig
-
-
 
 app.run_server()
